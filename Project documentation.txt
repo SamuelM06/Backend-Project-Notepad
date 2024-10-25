@@ -1,0 +1,56 @@
+Notepad With Python
+
+Eliecer And Samuel
+
+Name the Class: Notes
+
+{
+
+   Attributes:
+   Id
+   Title
+   Description
+   Date
+   
+ 
+}
+
+{
+   Methods:
+   Save
+   Search Note
+}
+
+
+***************************************************
+
+
+Name the Class: User
+
+{
+   Attributes:
+   Id
+   Name
+   Gmail
+   Password
+
+}
+
+{
+   Methods:
+     Register
+     Create Password
+     Create 
+     Edit
+     Delete
+     
+}
+
+Correciones:
+BD - int ok
+Id - Autoincrementable ok
+DatosUser  Fuera del metodo - ok
+
+
+
+
