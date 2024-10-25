@@ -1,7 +1,7 @@
 from datetime import date
 import sqlite3
 import os
-os.system("cls")
+
 
 
 #Clase Notas
@@ -52,9 +52,9 @@ class User:
         
         self.mis_notas.append(mi_nota)
     
-    def Edit_Notes(self,descripcion):
+    def edit_note(self,descripcion):
         pass
-    
+        #minuscualas
     def Delete_Notes(self):
         pass
     
@@ -62,7 +62,7 @@ class User:
         #Esta funcion permite guardar en la DB
         con = sqlite3.connect("BD_Projecto.db")
         cur = con.cursor()
-        cur.execute("INSERT INTO User (Name),(Gmail),(Password) VALUES (?,?,?)", (self.name),(self.gmail),(self.password))
+        cur.execute("INSERT INTO User (Name, Gmail, Password) VALUES (?,?,?)",( self.name, self.gmail , self.password))
         con.commit()
         #Imprimir todas las tablas de la DB
         res = cur.execute("SELECT name FROM sqlite_master WHERE type='table'")
@@ -71,7 +71,12 @@ class User:
 
 
 
-
+user=User(
+    name="Samuel Mena",
+    gmail="Samuel123@gmail,com",
+    password="123456"
+)
+user.Save_Notes()
 
 #Ingreso de datos para registrar un usuario
 """
