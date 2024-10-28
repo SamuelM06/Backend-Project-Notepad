@@ -13,11 +13,11 @@ class Notes:
         self.description = description
         self.date        = date.today()
         
-    def Search_Note(self):
+    def search_notes(self):
         #Falta logica
         print("")
     
-    def Obtener_descripcion_por_titulo(self, title):
+    def obtener_descripcion_por_titulo(self, title):
         #Recibe el titulo, busca la nota y devuelve la descripcion
         return title
     
@@ -35,10 +35,10 @@ class User:
         
         
     #Metodos        
-    def Create_Password(self):
+    def create_password(self):
         pass
     
-    def Create_Note(self):
+    def create_note(self):
         #Pedir al usuario los datos de la nota
         title_u= input("Digite titulo: ")
         description_u= input("Digite descripcion: ")
@@ -47,36 +47,36 @@ class User:
         mi_nota = Notes(
             title = title_u,
             description = description_u,
-            user_id = self.id #De donde sale este id?
+            user_id = self.id 
         )
         
         self.mis_notas.append(mi_nota)
     
     def edit_note(self,descripcion):
         pass
-        #minuscualas
-    def Delete_Notes(self):
+        #Sql
+        
+    def delete_notes(self):
         pass
+        #sql
     
-    def Save_Notes(self):
+    def save_notes(self):
         #Esta funcion permite guardar en la DB
         con = sqlite3.connect("BD_Projecto.db")
         cur = con.cursor()
         cur.execute("INSERT INTO User (Name, Gmail, Password) VALUES (?,?,?)",( self.name, self.gmail , self.password))
         con.commit()
-        #Imprimir todas las tablas de la DB
-        res = cur.execute("SELECT name FROM sqlite_master WHERE type='table'")
-        print(res.fetchall())
+
 
 
 
 
 user=User(
-    name="Samuel Mena",
-    gmail="Samuel123@gmail,com",
-    password="123456"
+    name="Eliecer Daza",
+    gmail="Eliecerdaza@gmail.com",
+    password="987654321"
 )
-user.Save_Notes()
+user.save_notes()
 
 #Ingreso de datos para registrar un usuario
 """
