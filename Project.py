@@ -1,10 +1,10 @@
-from datetime import date
+from datetime import date, datetime
 import sqlite3
 import os
 
 
 
-#Clase Notas
+#Notes Class
 class Notes:
      #Creo el constructor y paso los parametros
     def __init__(self, title = str,description = str, date= date) -> None:
@@ -14,43 +14,50 @@ class Notes:
         self.date        = date.today()
         
     def search_notes(self):
-        #Falta logica
+        #logical fault
         print("")
     
     def obtener_descripcion_por_titulo(self, title):
-        #Recibe el titulo, busca la nota y devuelve la descripcion
+        #Receives the title, finds the note and returns the description
         return title
     
+        
+    def create_note(self):
+        con = sqlite3.connect("BD_Projecto.db", timeout=10)
+        cur = con.cursor()
+        today_date = datetime.now().strftime("%Y-%m-%d")
+        cur.execute("INSERT INTO Notes (Title, Description, Date) VALUES (?,?,?)",( self.title, self.description, today_date))
+        con.commit()
+        con.close()
+
+#Entering data to register a user
+title_u = input("Enter title: ")
+description_u = input("Enter description: ")
+#End of data to register user
+
+#Object
+notes1 = Notes(
+    title       = title_u,
+    description = description_u
+)
+
+notes1.create_note()
 
 
-
-#Clase Usuarios
+#User Class
 
 class User:
     def __init__(self, name = str, gmail= str, password = str) -> None:
         self.name     = name
         self.gmail    = gmail
         self.password = password
-        self.mis_notas = []
+        self.my_notes = []
         
         
-    #Metodos        
+    #Methods
     def create_password(self):
         pass
-    
-    def create_note(self):
-        #Pedir al usuario los datos de la nota
-        title_u= input("Digite titulo: ")
-        description_u= input("Digite descripcion: ")
-        #Fin ingreso de datos
-        #Instancia
-        mi_nota = Notes(
-            title = title_u,
-            description = description_u,
-            user_id = self.id 
-        )
-        
-        self.mis_notas.append(mi_nota)
+      
     
     def edit_note(self,descripcion):
         pass
@@ -60,27 +67,30 @@ class User:
         pass
         #sql
     
-    def save_notes(self):
-        #Esta funcion permite guardar en la DB
-        con = sqlite3.connect("BD_Projecto.db")
+    def register_user(self):
+        #This function allows you to save to the DB
+        con = sqlite3.connect("BD_Projecto.db", timeout=10)
         cur = con.cursor()
         cur.execute("INSERT INTO User (Name, Gmail, Password) VALUES (?,?,?)",( self.name, self.gmail , self.password))
         con.commit()
+        con.close()     
+    
+    def delete_user(self):
+        pass
 
 
+#Entering data to register a user
+name_u = input("Enter Username: ")
+gmail_u = input("Enter User Gmail: ")
+password_u = input("Enter User Password: ")
+#End of data to register user
 
-
-
+#Object
 user=User(
-    name="Eliecer Daza",
-    gmail="Eliecerdaza@gmail.com",
-    password="987654321"
+    name     = name_u,
+    gmail    = gmail_u,
+    password = password_u
 )
-user.save_notes()
 
-#Ingreso de datos para registrar un usuario
-"""
-    name =input("Digite Nombre de Usuario: ")
-    gmail =input("Digite Gmail de Usuario: ")
-    password =input("Digite password de Usuario: ")
-"""
+
+user.register_user()

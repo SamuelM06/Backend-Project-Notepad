@@ -46,10 +46,6 @@ Name the Class: User
      
 }
 
-Correciones:
-BD - int ok
-Id - Autoincrementable ok
-DatosUser  Fuera del metodo - ok
 
 
 
