@@ -6,7 +6,7 @@ import os
 
 #Notes Class
 class Notes:
-     #Creo el constructor y paso los parametros
+     #We create the constructor with parameters
     def __init__(self, title = str,description = str, date= date) -> None:
          #Atributos
         self.title       = title
@@ -29,6 +29,13 @@ class Notes:
         cur.execute("INSERT INTO Notes (Title, Description, Date) VALUES (?,?,?)",( self.title, self.description, today_date))
         con.commit()
         con.close()
+        
+    def edit_note(self,descripcion):
+        pass
+        #Sql
+        
+    def delete_notes(self):
+        pass
 
 #Entering data to register a user
 title_u = input("Enter title: ")
@@ -41,7 +48,8 @@ notes1 = Notes(
     description = description_u
 )
 
-notes1.create_note()
+#Testing Notes functions
+#notes1.create_note()
 
 
 #User Class
@@ -59,14 +67,6 @@ class User:
         pass
       
     
-    def edit_note(self,descripcion):
-        pass
-        #Sql
-        
-    def delete_notes(self):
-        pass
-        #sql
-    
     def register_user(self):
         #This function allows you to save to the DB
         con = sqlite3.connect("BD_Projecto.db", timeout=10)
@@ -76,7 +76,21 @@ class User:
         con.close()     
     
     def delete_user(self):
-        pass
+        con = sqlite3.connect("BD_Projecto.db", timeout=10)
+        cur = con.cursor()
+        cur.execute("DELETE FROM User WHERE idU = 3")
+        con.commit()
+        con.close()
+        
+    def edit_user(self):
+        con = sqlite3.connect("BD_Projecto.db", timeout=10)
+        cur = con.cursor()
+        name_u = input("Enter New Username: ")
+        gmail_u = input("Enter New User Gmail: ")
+        password_u = input("Enter New User Password: ")
+        cur.execute("UPDATE User SET Name = ?, Gmail = ?, Password = ? WHERE idU = 5",(name_u, gmail_u, password_u))
+        con.commit()
+        con.close()
 
 
 #Entering data to register a user
@@ -92,5 +106,8 @@ user=User(
     password = password_u
 )
 
+#Testing User functions
 
-user.register_user()
+#user.register_user()
+#user.delete_user()
+#user.edit_user()
