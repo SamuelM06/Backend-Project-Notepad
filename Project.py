@@ -41,10 +41,6 @@ class Notes:
         con.commit()
         con.close()
         
-    def edit_note(self, id):
-        pass
-        #Sql
-        
         
     def delete_notes(self, id):
         con = sqlite3.connect("BD_Projecto.db", timeout=10)
@@ -88,7 +84,7 @@ notes1 = Notes(
 #notes1.search_notes()
 #notes1.search_notes_id(user_u)
 #notes1.delete_notes(user_u)
-notes1.edit_note(user_u, title_u, description_u)
+#notes1.edit_note(user_u, title_u, description_u)
 
 
 #User Class
@@ -110,15 +106,17 @@ class User:
         con.commit()
         con.close()     
     
-    def delete_user(self):
+    def delete_user(self,id):
         con = sqlite3.connect("BD_Projecto.db", timeout=10)
         cur = con.cursor()
-        cur.execute("DELETE FROM User WHERE idU = 3")
+        res = cur.execute("DELETE FROM User WHERE IdU = ?", (id,))
         con.commit()
+        if cur.rowcount > 0:
+            print("Usuario eliminado.")
+        else:
+            print("No se encontró ningun usuario con ese ID.")
         con.close()
         
-
-
 
 
 #Entering data to register a user
@@ -139,3 +137,4 @@ user=User(
 #user.register_user()
 #user.delete_user()
 #user.edit_user()
+#user.delete_user(user_u)
