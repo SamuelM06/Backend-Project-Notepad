@@ -2,70 +2,105 @@ from datetime import date, datetime
 import sqlite3
 import os
 
-
-
 #Notes Class
 class Notes:
      #We create the constructor with parameters
-    def __init__(self, title = str,description = str, date= date) -> None:
+    def __init__(self, title : str,description : str, date: date, userid: int) -> None:
          #Atributos
         self.title       = title
         self.description = description
         self.date        = date.today()
+        self.userid      = userid
+        
         
     def search_notes(self):
-        #logical fault
-        print("")
-    
-    def obtener_descripcion_por_titulo(self, title):
-        #Receives the title, finds the note and returns the description
-        return title
-    
+        con = sqlite3.connect("BD_Projecto.db", timeout=10)
+        cur = con.cursor()
+        res = cur.execute("SELECT Title, Description, Date FROM Notes")
+        notes = res.fetchall()  
+        print(notes)    
+        con.close()
+        
+    def search_notes_id(self, id):
+        con = sqlite3.connect("BD_Projecto.db", timeout=10)
+        cur = con.cursor()
+        res = cur.execute("SELECT Title, Description, Date FROM Notes WHERE IdN = ?", (id,))
+        note = res.fetchone() 
+        if note:
+            print("Nota encontrada")
+            print(note)
+        else:
+            print("No se encontró ninguna nota con ese ID.")
+        con.close()
+
         
     def create_note(self):
         con = sqlite3.connect("BD_Projecto.db", timeout=10)
         cur = con.cursor()
-        today_date = datetime.now().strftime("%Y-%m-%d")
-        cur.execute("INSERT INTO Notes (Title, Description, Date) VALUES (?,?,?)",( self.title, self.description, today_date))
+        cur.execute("INSERT INTO Notes (Title, Description, Date) VALUES (?,?,?)",( self.title, self.description))
         con.commit()
         con.close()
         
-    def edit_note(self,descripcion):
+    def edit_note(self, id):
         pass
         #Sql
         
-    def delete_notes(self):
-        pass
+        
+    def delete_notes(self, id):
+        con = sqlite3.connect("BD_Projecto.db", timeout=10)
+        cur = con.cursor()
+        res = cur.execute("DELETE FROM Notes WHERE IdN = ?", (id,))
+        con.commit()
+        if cur.rowcount > 0:
+            print("Nota eliminada.")
+        else:
+            print("No se encontró ninguna nota con ese ID.")
+        con.close()
+
+    def edit_note(self, id, new_title, new_description):
+        con = sqlite3.connect("BD_Projecto.db", timeout=10)
+        cur = con.cursor()
+        cur.execute("UPDATE Notes SET Title = ?, Description = ? WHERE IdN = ?", (new_title, new_description, id))
+        con.commit()
+        if cur.rowcount > 0:
+            print("Nota actualizada.")
+        else:
+            print("No se encontró ninguna nota con ese ID.")
+        con.close()
+
 
 #Entering data to register a user
 title_u = input("Enter title: ")
 description_u = input("Enter description: ")
+user_u = input("Enter Id: ")
 #End of data to register user
 
 #Object
 notes1 = Notes(
     title       = title_u,
-    description = description_u
+    description = description_u,
+    date=date.today(),
+    userid=user_u
 )
 
 #Testing Notes functions
 #notes1.create_note()
+#notes1.search_notes()
+#notes1.search_notes_id(user_u)
+#notes1.delete_notes(user_u)
+notes1.edit_note(user_u, title_u, description_u)
 
 
 #User Class
 
 class User:
-    def __init__(self, name = str, gmail= str, password = str) -> None:
+    def __init__(self, name : str, gmail: str, password : str) -> None:
         self.name     = name
         self.gmail    = gmail
         self.password = password
         self.my_notes = []
         
-        
     #Methods
-    def create_password(self):
-        pass
-      
     
     def register_user(self):
         #This function allows you to save to the DB
@@ -82,15 +117,8 @@ class User:
         con.commit()
         con.close()
         
-    def edit_user(self):
-        con = sqlite3.connect("BD_Projecto.db", timeout=10)
-        cur = con.cursor()
-        name_u = input("Enter New Username: ")
-        gmail_u = input("Enter New User Gmail: ")
-        password_u = input("Enter New User Password: ")
-        cur.execute("UPDATE User SET Name = ?, Gmail = ?, Password = ? WHERE idU = 5",(name_u, gmail_u, password_u))
-        con.commit()
-        con.close()
+
+
 
 
 #Entering data to register a user
