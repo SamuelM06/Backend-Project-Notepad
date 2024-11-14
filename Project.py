@@ -17,7 +17,7 @@ class Notes:
         con = sqlite3.connect("BD_Projecto.db", timeout=10)
         cur = con.cursor()
         res = cur.execute("SELECT Title, Description, Date FROM Notes")
-        notes = res.fetchall()  
+        notes = res.fetchall() 
         print(notes)    
         con.close()
         
