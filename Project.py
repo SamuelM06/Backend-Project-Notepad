@@ -135,6 +135,5 @@ user=User(
 #Testing User functions
 
 #user.register_user()
-#user.delete_user()
-#user.edit_user()
 #user.delete_user(user_u)
+

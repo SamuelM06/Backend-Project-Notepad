@@ -1,27 +1,46 @@
-from typing import Union
-
 from fastapi import FastAPI
 from models import User, Notes
-
-
 app = FastAPI()
 
+app.title = "Backend-Project-Notepad"
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+#Home 
+@app.get("/", tags=["Root"])
+def root():
+    return {"Mensaje:": "Bienvenido a Backend-Project-Notepad"}
+
+#User
+#register_user
+@app.get("/user",tags=["User"])
+def create_user(user: User):
+    return {""}
+
+#delete_user
+@app.delete("/user/{user_id}",tags=["User"])
+def delete_user(user_id: int, user: User):
+    return {""}
 
 
-@app.get("/users/{user_id}")
-def read_user(user_id: int, q: Union[str, None] = None):
-    return {"user_id": user_id, "q": q}
 
+#Notes
 
-@app.put("/users/{user_id}")
-def update_user(user_id: int, user: User):
-    return {"user_name": user.name, "user_id": user_id}
+app.get("/notes", tags=["Notes"])
+def search_notes(note:Notes):
+    return{""}
 
-@app.put("/notes/{note_id}")
+app.get("/notes/{IdN}", tags=["Notes"])
+def search_notes_id(note_id):
+    return{"mesaage": f"Nota {note_id}"}
+
+@app.post("/notes", tags=["Notes"])
+def create_note(note: Notes):
+    return {"message": "Nota creada", "data": note}
+
+@app.put("/notes/{note_id}",tags=["Notes"])
 def update_note(note_id: int, note: Notes):
-    return {"title": note.title, "user_id": note.user_id, "note_id": note_id}
+    return {"message": f"Nota {note_id} actualizada", "data": note}
+
+@app.delete("/notes/{note_id}", tags=["Notes"])
+def delete_note(note_id: int):
+    return {"message": f"Nota {note_id} eliminada"}
 
