@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from models import User, Notes
 from database import create_db_and_tables, SessionDep
 from fastapi import HTTPException
+from datetime import datetime
 
 
 create_db_and_tables()
@@ -35,13 +36,22 @@ def delete_user(user_id:int, session: SessionDep):
     return {"Usuario eliminado": True}
 
 
-#Probando metodos primero en usuario
+#Metodos en usuario listos
 
+
+
+#Inicio prueba metodos Notes
 
 # Notes: Crear nota
 @app.post("/notes", tags=["Notes"])
-def create_note(note: Notes):  
-    return {"message": "Nota creada exitosamente"}
+def create_note(note: Notes, session:SessionDep):  
+    note.date = datetime.strptime(note.date, '%Y-%m-%d').date()
+    session.add(note)
+    session.commit()
+    session.refresh(note)
+    return {"message" : "Nota creada exitosamente","data": note}
+
+
 
 # Notes: Buscar todas las notas
 @app.get("/notes", tags=["Notes"])
@@ -60,5 +70,13 @@ def update_note(note_id: int):
 
 # Notes: Eliminar nota
 @app.delete("/notes/{note_id}", tags=["Notes"])
-def delete_note(note_id: int):
-    return {"message": f"Nota {note_id} eliminada"}
+def delete_note(note_id: int, session: SessionDep):
+    note = session.get(Notes, note_id)
+    if not note:
+        raise HTTPException(status_code=404, detail="Notes not found")
+    session.delete(note)
+    session.commit()
+    return {"Nota eliminada": True}
+
+
+#Fin prueba metodos Notes
