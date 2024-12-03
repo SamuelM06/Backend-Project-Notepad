@@ -1,9 +1,11 @@
-from typing import Union
+from typing import Union,Annotated
 from fastapi import FastAPI
 from models import User, Notes
 from database import create_db_and_tables, SessionDep
-from fastapi import HTTPException
+from fastapi import HTTPException,Query
 from datetime import datetime
+from sqlalchemy import select
+
 
 
 create_db_and_tables()
@@ -52,16 +54,25 @@ def create_note(note: Notes, session:SessionDep):
     return {"message" : "Nota creada exitosamente","data": note}
 
 
-
 # Notes: Buscar todas las notas
 @app.get("/notes", tags=["Notes"])
-def search_notes(): 
-    return {"message": "Notas encontradas"}
+def search_notes(session: SessionDep): 
+    try:
+        notes = session.exec(select(Notes)).all()
+        all_notes = [note[0].dict() for note in notes]
+        return all_notes
+    except Exception as e: 
+        return {"error": str(e)}  
+
 
 # Notes: Buscar nota por ID
 @app.get("/notes/{note_id}", tags=["Notes"])
-def search_notes_id(note_id: int):  # Usa get_db aquí
-    return {"message": "Nota encontrada"}
+def search_notes_id(note_id: int, session:SessionDep): 
+    note = session.get(Notes, note_id)
+    if not note:
+        raise HTTPException(status_code=404, detail="Note not found")
+    return {"Nota encontrada":note}
+
 
 # Notes: Actualizar nota
 @app.put("/notes/{note_id}", tags=["Notes"])

@@ -1,2 +1,4 @@
 BD_Projecto.db
 venv/
+__pycache__/
+
