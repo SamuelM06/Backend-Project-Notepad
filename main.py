@@ -1,6 +1,6 @@
 from typing import Union,Annotated
 from fastapi import FastAPI
-from models import User, Notes
+from models import User, Notes,NoteUpdate
 from database import create_db_and_tables, SessionDep
 from fastapi import HTTPException,Query
 from datetime import datetime
@@ -74,10 +74,21 @@ def search_notes_id(note_id: int, session:SessionDep):
     return {"Nota encontrada":note}
 
 
-# Notes: Actualizar nota
+# Notes: Editar nota
 @app.put("/notes/{note_id}", tags=["Notes"])
-def update_note(note_id: int):
-    return {"message": f"Nota {note_id} actualizada"}
+def update_note(note_id: int, session:SessionDep, note_data: NoteUpdate):
+    note_db=session.get(Notes, note_id)
+    if not note_db:
+         raise HTTPException(status_code=404, detail="Nota no encontrada")
+    if note_data.title is not None:
+        note_db.title = note_data.title
+    if note_data.description is not None:
+        note_db.description = note_data.description
+        session.add(note_db)  # Esto asegura que los cambios persistan
+        session.commit()
+        session.refresh(note_db)
+    return {"message": "Nota actualizada", "note": note_db.model_dump()}
+
 
 # Notes: Eliminar nota
 @app.delete("/notes/{note_id}", tags=["Notes"])

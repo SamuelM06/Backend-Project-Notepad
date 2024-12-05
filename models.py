@@ -19,6 +19,8 @@ class Notes(SQLModel, table=True):
     date: date
     idn: int | None = Field(default=None, primary_key=True)   
 
-
+class NoteUpdate(SQLModel):
+    title: str | None = Field(default=None)
+    description: str | None = Field(default=None)
 
 
