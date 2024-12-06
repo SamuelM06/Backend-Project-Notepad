@@ -1,6 +1,6 @@
 from typing import Union,Annotated
 from fastapi import FastAPI
-from models import User, Notes,NoteUpdate
+from models import User, Notes
 from database import create_db_and_tables, SessionDep
 from fastapi import HTTPException,Query
 from datetime import datetime
@@ -76,7 +76,7 @@ def search_notes_id(note_id: int, session:SessionDep):
 
 # Notes: Editar nota
 @app.put("/notes/{note_id}", tags=["Notes"])
-def update_note(note_id: int, session:SessionDep, note_data: NoteUpdate):
+def update_note(note_id: int, session:SessionDep, note_data: Notes):
     note_db=session.get(Notes, note_id)
     if not note_db:
          raise HTTPException(status_code=404, detail="Nota no encontrada")
@@ -99,6 +99,4 @@ def delete_note(note_id: int, session: SessionDep):
     session.delete(note)
     session.commit()
     return {"Nota eliminada": True}
-
-
 #Fin prueba metodos Notes
