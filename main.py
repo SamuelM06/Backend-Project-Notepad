@@ -7,7 +7,6 @@ from datetime import datetime
 from sqlalchemy import select
 
 
-
 create_db_and_tables()
 
 app = FastAPI()
@@ -100,3 +99,4 @@ def delete_note(note_id: int, session: SessionDep):
     session.commit()
     return {"Nota eliminada": True}
 #Fin prueba metodos Notes
+
